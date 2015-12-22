@@ -12,7 +12,13 @@ Notes:
   now
 - I only test it in standalone mode
 
+Installation:
+
+- download from [releases](https://github.com/yaroot/gitbucket-pages-plugin/releases)
+- move the jar file to `<gitbucket_home>/plugins/` (`gitbucket_home` defaults to `~/.gitbucket`)
+- restart gitbucket and enjoy
+
 Releases:
 
-- 0.1: initial release
+- 0.1: initial release, tested with gitbucket 3.9
 
