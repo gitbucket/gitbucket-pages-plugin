@@ -12,13 +12,13 @@ import org.eclipse.jgit.treewalk.TreeWalk
 import scala.language.implicitConversions
 
 class PagesController
-  extends ControllerBase
+  extends PagesControllerBase
   with AccountService
   with RepositoryService
   with ReferrerAuthenticator
 
-trait PagesControllerBase {
-  self: ControllerBase with AccountService with RepositoryService with ReferrerAuthenticator =>
+trait PagesControllerBase extends ControllerBase {
+  self: AccountService with RepositoryService with ReferrerAuthenticator =>
 
   val PAGES_BRANCH = "gh-pages"
 
@@ -34,7 +34,7 @@ trait PagesControllerBase {
       objectId match {
         case Some((path0, objId)) =>
           // redirect [owner/repo/pages/path] -> [owner/repo/pages/path/]
-          if (path0 != path && path0.startsWith(path) && !path.endsWith("/")) {
+          if (shouldRedirect(path, path0)) {
             redirect(s"/${repository.owner}/${repository.name}/pages/$path/")
           } else {
             JGitUtil.getObjectLoaderFromId(git, objId) { loader =>
@@ -54,6 +54,9 @@ trait PagesControllerBase {
     redirect(s"/${repository.owner}/${repository.name}/pages/")
   })
 
+  def shouldRedirect(path: String, path0: String) =
+    !isRoot(path) && path0 != path && path0.startsWith(path) && !path.endsWith("/")
+
   def getPathIndexObjectId(git: Git, path: String, revCommit: RevCommit) = {
     getPathObjectId0(git, path, revCommit)
       .orElse(getPathObjectId0(git, appendPath(path, "index.html"), revCommit))
@@ -65,10 +68,12 @@ trait PagesControllerBase {
   }
 
   def appendPath(base: String, suffix: String): String = {
-    if (base == "") suffix
+    if (isRoot(base)) suffix
     else if (base.endsWith("/")) base + suffix
     else base + "/" + suffix
   }
+
+  def isRoot(path: String) = path == ""
 
   // copy&paste from RepositoryViewerControllerBase
   private def getPathObjectId(git: Git, path: String, revCommit: RevCommit): Option[ObjectId] = {
