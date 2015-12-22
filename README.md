@@ -11,6 +11,8 @@ Notes:
   description, there's no way to provide handy link automatically for
   now
 - only tested in standalone mode
+- might be incompatible with absolute urls if you are using github
+  pages already
 
 Installation:
 
