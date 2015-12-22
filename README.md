@@ -1,16 +1,16 @@
-This plugin provides *Project Pages* feature for
+This plugin provides *Project Pages* for
 [GitBucket](https://github.com/gitbucket/gitbucket).
 
 Notes:
 
-- view static web page in `gh-pages` branch under
-  `/<user>/<project>/pages/`
+- view static web page in `gh-pages` branch at
+  `<gitbucket base url>/<user>/<project>/pages/`
 - no site generator will run (you must build & commit all html with
   assets if you use jekyll and the like)
 - you kinda have to add links to pages in README or repository
   description, there's no way to provide handy link automatically for
   now
-- I only test it in standalone mode
+- only tested in standalone mode
 
 Installation:
 
