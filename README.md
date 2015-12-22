@@ -20,7 +20,7 @@ Installation:
 - move the jar file to `<gitbucket_home>/plugins/` (`gitbucket_home` defaults to `~/.gitbucket`)
 - restart gitbucket and enjoy
 
-Releases:
+Version compatibility:
 
-- 0.1: initial release, tested with gitbucket 3.9
+- 0.1: tested with gitbucket 3.9
 
