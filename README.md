@@ -1,7 +1,10 @@
+
+# Gitbucket-Pages-Plugin
+
 This plugin provides *Project Pages* for
 [GitBucket](https://github.com/gitbucket/gitbucket).
 
-Notes:
+## Notes
 
 - view static web page in `gh-pages` branch at
   `<gitbucket base url>/<user>/<project>/pages/`
@@ -14,13 +17,25 @@ Notes:
 - might be incompatible with absolute urls (eg: you use github project
   pages and assume your pages will aways live under `/<project/`)
 
-Installation:
+## Installation
 
 - download from [releases](https://github.com/yaroot/gitbucket-pages-plugin/releases)
 - move the jar file to `<gitbucket_home>/plugins/` (`gitbucket_home` defaults to `~/.gitbucket`)
 - restart gitbucket and enjoy
 
-Version compatibility:
+## Version compatibility
 
 - 0.1: tested with gitbucket 3.9
+
+## Security
+
+The simplistic design of this plugin suffers from XSS vulnerability,
+you **have to** trust your users.
+Or if you're really panic, nginx could be used (or any other front proxy).
+Suppose you use `gitbucket.local` for hosting gitbucket and
+`pages.local` for hosting pages:
+
+- redirect `/[^/]+/[^/]+/pages.*` under `gitbucket.local` ot use
+  `pages.local`
+- restrict `pages.local` to only have access to pages url above
 
