@@ -32,8 +32,7 @@ This plugin provides *Project Pages* for
 The simplistic design of this plugin suffers from XSS vulnerability,
 you **have to** trust your users.
 Or if you're really panic, nginx could be used (or any other front proxy).
-Suppose you use `gitbucket.local` for hosting gitbucket and
-`pages.local` for hosting pages:
+Suppose you use `gitbucket.local` for gitbucket and `pages.local` for pages:
 
 - redirect `/[^/]+/[^/]+/pages.*` under `gitbucket.local` ot use
   `pages.local`
