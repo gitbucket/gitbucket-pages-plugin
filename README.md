@@ -27,14 +27,36 @@ This plugin provides *Project Pages* for
 
 - 0.1: tested with gitbucket 3.9
 
-## Security
+## Security (panic mode)
 
-The simplistic design of this plugin suffers from XSS vulnerability,
-you **have to** trust your users.
-Or if you're really panic, nginx could be used (or any other front proxy).
-Suppose you use `gitbucket.local` for gitbucket and `pages.local` for pages:
+To prevent XSS, one must use two different domain to host pages and
+gitbucket. Below is a working example of nginx config to achieve that.
 
-- redirect `/[^/]+/[^/]+/pages.*` under `gitbucket.local` ot use
-  `pages.local`
-- restrict `pages.local` to only have access to pages url above
+```
+server {
+    listen 80;
+    server_name git.local;
+
+    location ~ ^/([^/]+)/([^/]+)/pages/(.*)$ {
+        rewrite  ^/([^/]+)/([^/]+)/pages/(.*)$  http://doc.local/$1/$2/pages/$3  redirect;
+    }
+
+    location / {
+        proxy_pass 127.0.0.1:8080;
+    }
+}
+
+server {
+    listen 80;
+    server_name doc.local;
+
+    location ~ ^/([^/]+)/([^/]+)/(.*)$ {
+        proxy_pass 127.0.0.1:8080;
+    }
+
+    location / {
+        return 403;
+    }
+}
+```
 
