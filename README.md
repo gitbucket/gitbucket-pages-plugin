@@ -25,7 +25,7 @@ This plugin provides *Project Pages* for
 
 ## Version compatibility
 
-- 0.1: tested with gitbucket 3.9
+- 0.1: tested with gitbucket 3.9 & 3.10.x
 
 ## Security (panic mode)
 
