@@ -23,9 +23,13 @@ This plugin provides *Project Pages* for
 - move the jar file to `<gitbucket_home>/plugins/` (`gitbucket_home` defaults to `~/.gitbucket`)
 - restart gitbucket and enjoy
 
-## Version compatibility
+## Versions
 
-- 0.1: tested with gitbucket 3.9 & 3.10.x
+| pages version | gitbucket version |
+|     :---:     |       :---:       |
+| 0.2           | 3.11              |
+| 0.1           | 3.9 & 3.10.x      |
+
 
 ## Security (panic mode)
 
