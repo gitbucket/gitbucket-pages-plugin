@@ -1,5 +1,5 @@
 
-# Gitbucket-Pages-Plugin [![Gitter chat](https://badges.gitter.im/gitbucket/gitbucket.png)](https://gitter.im/gitbucket/gitbucket) [![Build Status](https://travis-ci.org/yaroot/gitbucket-pages-plugin.svg?branch=master)](https://travis-ci.org/yaroot/gitbucket-pages-plugin)
+# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/yaroot/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/yaroot/gitbucket-pages-plugin)
 
 This plugin provides *Project Pages* for
 [GitBucket](https://github.com/gitbucket/gitbucket).
