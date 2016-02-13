@@ -10,7 +10,8 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-featur
 
 resolvers += Resolver.jcenterRepo
 
-resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
+// resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
+resolvers += "gitbucket-mirror" at "https://dl.bintray.com/yaroot/mirror-gitbucket/"
 
 libraryDependencies ++= Seq(
   "gitbucket"          % "gitbucket-assembly" % "3.11.0"  % "provided",
