@@ -3,3 +3,5 @@ jdk:
   - oraclejdk8
   - openjdk8
 install: true
+script:
+  - sbt clean compile package
