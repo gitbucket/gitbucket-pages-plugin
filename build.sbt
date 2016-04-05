@@ -2,9 +2,9 @@ organization  := "gitbucket"
 
 name          := "pages-plugin"
 
-version       := "0.4"
+version       := "0.5-SNAPSHOT"
 
-scalaVersion  := "2.11.7"
+scalaVersion  := "2.11.8"
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
 
