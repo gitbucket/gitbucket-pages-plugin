@@ -50,7 +50,7 @@ server {
     listen 80;
     server_name doc.local;
 
-    location ~ ^/([^/]+)/([^/]+)/(.*)$ {
+    location ~ ^/([^/]+)/([^/]+)/pages/(.*)$ {
         proxy_pass 127.0.0.1:8080;
     }
 
