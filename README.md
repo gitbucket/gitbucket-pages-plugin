@@ -20,11 +20,11 @@ This plugin provides *Project Pages* for
 
 | pages version | gitbucket version |
 |     :---:     |       :---:       |
-| 0.5           | 4.0               |
+| 0.5           | 4.0, 4.2          |
 | 0.4           | 3.13              |
 | 0.3           | 3.12              |
 | 0.2           | 3.11              |
-| 0.1           | 3.9 & 3.10.x      |
+| 0.1           | 3.9, 3.10         |
 
 
 ## Security (panic mode)
