@@ -4,11 +4,11 @@ import gitbucket.plugin.pages.PagesController
 import io.github.gitbucket.solidbase.model.Version
 
 class Plugin extends gitbucket.core.plugin.Plugin {
-  import gitbucket.plugin.pages.util.Version
+  import gitbucket.plugin.pages.util.VersionUtil
   override val pluginId = "pages"
   override val pluginName = "Pages Plugin"
   override val description = "Project pages for gitbucket"
-  override val versions = List(new Version(Version.version.getOrElse("unknown")))
+  override val versions = List(new Version(VersionUtil.version.getOrElse("unknown")))
 
   override val controllers: Seq[(String, ControllerBase)] = Seq(
     "/*" -> new PagesController
@@ -20,7 +20,7 @@ package gitbucket.plugin.pages.util {
   import scala.util.Try
   import java.util.jar.{ Manifest => JarManifest }
 
-  object Version {
+  object VersionUtil {
     val version = Try(getVersionFromManifests()).toOption.flatten
     def getVersionFromManifests() = {
       val resources = getClass.getClassLoader.getResources("META-INF/MANIFEST.MF").asScala.toList
