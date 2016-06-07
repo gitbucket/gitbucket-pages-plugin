@@ -4,7 +4,7 @@
 This plugin provides *Project Pages* for
 [GitBucket](https://github.com/gitbucket/gitbucket).
 
-## User documentation
+## User guide
 
 This plugin would serve static file under `gh-pages` branch under
 `<base url>/<user>/<project>/pages/`.
