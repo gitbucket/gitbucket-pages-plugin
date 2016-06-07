@@ -13,7 +13,7 @@ This plugin would serve static file under `gh-pages` branch under
 
 - checkout orphan branch via `git checkout --orphan && git rm -f $(git ls-files)`
 - `echo '<h1>hello, world</h1>' > index.html`
-- commit && push to gitbuck
+- commit && push to gitbucket
 - open browser and point to `<your repo url>/pages`
 
 **note**: this plugin won't render markdown for you, pre-build the
