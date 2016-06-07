@@ -4,11 +4,20 @@
 This plugin provides *Project Pages* for
 [GitBucket](https://github.com/gitbucket/gitbucket).
 
-## Notes
+## User documentation
 
-- `<base url>/<user>/<project>/pages/` for branch `gh-pages`
-- no site generator will run
-- have to manually add links to it
+This plugin would serve static file under `gh-pages` branch under
+`<base url>/<user>/<project>/pages/`.
+
+### Quick start
+
+- checkout orphan branch via `git checkout --orphan && git rm -f $(git ls-files)`
+- `echo '<h1>hello, world</h1>' > index.html`
+- commit && push to gitbuck
+- open browser and point to `<your repo url>/pages`
+
+**note**: this plugin won't render markdown for you, pre-build the
+site or just use wiki
 
 ## Installation
 
