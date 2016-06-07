@@ -1,28 +1,28 @@
 
 # Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/yaroot/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/yaroot/gitbucket-pages-plugin)
 
-This plugin provides *Project Pages* for
-[GitBucket](https://github.com/gitbucket/gitbucket).
+This plugin provides *Project Pages* functionality for
+[GitBucket](https://github.com/gitbucket/gitbucket) based repositories.
 
 ## User documentation
 
-This plugin would serve static file under `gh-pages` branch under
+This plugin can serve static files from a special orphan branch called `gh-pages` under
 `<base url>/<user>/<project>/pages/`.
 
 ### Quick start
 
-- checkout orphan branch via `git checkout --orphan && git rm -f $(git ls-files)`
-- `echo '<h1>hello, world</h1>' > index.html`
-- commit && push to gitbucket
-- open browser and point to `<your repo url>/pages`
+- create an orphan branch called `gh-pages` using `git checkout --orphan gh-pages && git rm -f $(git ls-files)`
+- create a static site under this branch. E.g. `echo '<h1>hello, world</h1>' > index.html` to create a simple file.
+- commit && push to gitbucket this orphan branch
+- open the browser and point to `<your repo url>/pages`
 
-**note**: this plugin won't render markdown for you, pre-build the
-site or just use wiki
+**Note**: This plugin won't render markdown content. To render markdown content, use the wiki or one of the many static
+site generators.
 
 ## Installation
 
 - download from [releases](https://github.com/yaroot/gitbucket-pages-plugin/releases)
-- move the jar file to `<gitbucket_home>/plugins/` (`gitbucket_home` defaults to `~/.gitbucket`)
+- copy the jar file to `<GITBUCKET_HOME>/plugins/` (Note that `GITBUCKET_HOME` defaults to `~/.gitbucket`)
 - restart gitbucket and enjoy
 
 ## Versions
@@ -38,8 +38,8 @@ site or just use wiki
 
 ## Security (panic mode)
 
-To prevent XSS, one must use two different domain to host pages and
-gitbucket. Below is a working example of nginx config to achieve that.
+To prevent XSS, one must use two different domains to host the pages and
+Gitbucket itself. Below is a working example of nginx configuration to achieve that.
 
 ```
 server {
