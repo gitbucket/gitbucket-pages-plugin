@@ -16,8 +16,18 @@ This plugin would serve static file under `gh-pages` branch under
 - commit && push to gitbucket
 - open browser and point to `<your repo url>/pages`
 
+Whant's next?
+
+- generate the site using static website generator, like
+[jekyll](http://jekyllrb.com/) and [hugo](https://gohugo.io/)
+- or using documentation generator, like
+[sphinx](http://www.sphinx-doc.org/en/stable/) and
+[gitbook](https://www.gitbook.com/)
+- make the site look beautiful via some
+[templates](https://github.com/blog/1081-instantly-beautiful-project-pages)
+
 **note**: this plugin won't render markdown for you, pre-build the
-site or just use wiki
+site and commit all rendered files and resources into the repository
 
 ## Installation
 
