@@ -17,7 +17,7 @@ This plugin can serve static files from a special orphan branch called `gh-pages
 - open the browser and point to `<your repo url>/pages`
 
 **Note**: This plugin won't render markdown content. To render markdown content, use the wiki or one of the many static
-site generators.
+site generators ([jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/), etc)
 
 ## Installation
 
