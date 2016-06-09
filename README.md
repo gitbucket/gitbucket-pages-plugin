@@ -69,3 +69,8 @@ server {
 }
 ```
 
+## CI
+
+- build by [travis-ci](https://travis-ci.org/yaroot/gitbucket-pages-plugin)
+- pre-release binaries on [bintray](https://dl.bintray.com/yaroot/gitbucket-pages-plugin/gitbucket/)
+
