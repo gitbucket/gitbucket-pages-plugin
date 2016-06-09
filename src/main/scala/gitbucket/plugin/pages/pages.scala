@@ -9,6 +9,7 @@ import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.treewalk.TreeWalk
 
+import scala.annotation.tailrec
 import scala.language.implicitConversions
 
 class PagesController
@@ -20,12 +21,12 @@ class PagesController
 trait PagesControllerBase extends ControllerBase {
   self: AccountService with RepositoryService with ReferrerAuthenticator =>
 
-  val PAGES_BRANCH = "gh-pages"
+  val PAGES_BRANCHES = List("gb-pages", "gh-pages")
 
   get("/:owner/:repository/pages/*")(referrersOnly { repository =>
     val path = params("splat")
     using(Git.open(Directory.getRepositoryDir(repository.owner, repository.name))) { git =>
-      val objectId = Option(git.getRepository.resolve(PAGES_BRANCH))
+      val objectId = resolveBranch(git, PAGES_BRANCHES)
         .map(JGitUtil.getRevCommitFromId(git, _))
         .flatMap { revCommit =>
           getPathIndexObjectId(git, path, revCommit)
@@ -53,6 +54,17 @@ trait PagesControllerBase extends ControllerBase {
   get("/:owner/:repository/pages")(referrersOnly { repository =>
     redirect(s"/${repository.owner}/${repository.name}/pages/")
   })
+
+  @tailrec
+  final def resolveBranch(git: Git, names: List[String]): Option[ObjectId] = {
+    names match {
+      case name :: rest =>
+        val objectId = Option(git.getRepository.resolve(name))
+        if (objectId.isEmpty) resolveBranch(git, rest)
+        else objectId
+      case Nil => None
+    }
+  }
 
   def shouldRedirect(path: String, path0: String) =
     !isRoot(path) && path0 != path && path0.startsWith(path) && !path.endsWith("/")
