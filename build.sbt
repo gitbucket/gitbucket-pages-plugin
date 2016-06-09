@@ -10,3 +10,7 @@ libraryDependencies ++= Seq(
   "gitbucket"          % "gitbucket-assembly" % "4.0.0"   % "provided",
   "javax.servlet"      % "javax.servlet-api"  % "3.1.0"   % "provided"
 )
+
+// bintrayReleaseOnPublish in ThisBuild := false
+bintrayOmitLicense := true
+bintrayRepository := "gitbucket-pages-plugin"
