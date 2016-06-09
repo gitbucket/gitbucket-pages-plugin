@@ -13,7 +13,7 @@ before_script:
 - echo "user = $BT_USER" >> ~/.bintray/.credentials
 - echo "password = $BT_KEY" >> ~/.bintray/.credentials
 script:
-- sbt clean compile package
+- sbt publish
 cache:
   directories:
   - "$HOME/.ivy2"
