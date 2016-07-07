@@ -7,7 +7,7 @@ resolvers += Resolver.jcenterRepo
 resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
 
 libraryDependencies ++= Seq(
-  "gitbucket"          % "gitbucket-assembly" % "4.0.0"   % "provided",
+  "gitbucket"          % "gitbucket-assembly" % "4.2.0"   % "provided",
   "javax.servlet"      % "javax.servlet-api"  % "3.1.0"   % "provided"
 )
 
