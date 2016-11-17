@@ -3,12 +3,14 @@ name          := "pages-plugin"
 scalaVersion  := "2.11.8"
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
 
-resolvers += Resolver.jcenterRepo
-resolvers += "amateras-repo" at "http://amateras.sourceforge.jp/mvn/"
+resolvers ++= Seq(
+  Resolver.jcenterRepo,
+  Resolver.mavenLocal
+)
 
 libraryDependencies ++= Seq(
-  "gitbucket"          % "gitbucket-assembly" % "4.3.0"   % "provided",
-  "javax.servlet"      % "javax.servlet-api"  % "3.1.0"   % "provided"
+  "io.github.gitbucket"   %%  "gitbucket"           % "4.6.0",
+  "javax.servlet"         %   "javax.servlet-api"   % "3.1.0"
 )
 
 // bintrayReleaseOnPublish in ThisBuild := false
