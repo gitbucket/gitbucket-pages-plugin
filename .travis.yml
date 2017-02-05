@@ -1,17 +1,6 @@
 language: scala
 jdk:
 - oraclejdk8
-env:
-  global:
-  - secure: Hu3AUvab2N0kX2tu2x+WIyR4BVY8dFOmxwid2Br0eUaeVPeTCEDAJ98C5pYpfszNm14NsLp5ldLXJYhaaDfcPkCvoej3U0W8crPJLn3kY16zBziprb48NsOnayDysJK1GU5DxaYaGFneig9GuipUq9cSeTFqE8HKDNoQHvt9AgS7BC1UrjOD86fsso+eXDiwAtyXnxNv4O3R5akGDX48QMzlahcEYY6uqcLCV+8t49geFQKvnhNjk56HT4Q8gpno6COhxlK4+BEGGjLtkk7Y5cOkSytJrWQIxez2bNin1iBJxKt1h2AbPgwajkh1K3S980xt5UyS86jNgO/VrjJi1N5cpBw2pJWMyUvYZrWW8DgWi9cY9GqNC3nMJ12hte+EiU8xjubbWsb8ZuupBvJv6ZSbjonRhjHFDLR+3socNXRFLWgpCyvHo5csQ8EhvOOaCce7ynifNtg1GgGzENRHhwhlmKFV+tEOsDHHncxCvlSegXJ7azUR6UKCxxNL+KGxWgkbqZCx/eOnYCQSIdDaUND9bawWvJ6MxwkX6THrp56wpDk2o1nsgt7/lAYFT+VjdfVJPsIk9MzCg1jqK0QyjJ2FeZ8IjWF0ZoIGhaPkhVdnqnjdmcqfEHbUCmxYGjCktJ3QhxDeIyxDoJTbfi+trbxMGs4kP89P0szvb4K8Cog=
-  - secure: eu4agMObgp8RGEuhv/T4Ha3kXQFg3SdkwnisCqQkkT8KEYE9LZzZ2PnmYC1KDrCW2pmTrJeox/qB6XdTz5QGG+0dBDOQKb6jw3iZTBOcpUF2JjlRnWDcE26ATMZHcLR1FkqiRBUkMx+X0kSVfzmDlmiybC/nKmOoNO61kFoFuAV+TSS0uUj/1Qem+oEbWgsTdOz07yOKVt3zvHgv98xrEKl+qQC8MN80ZdvI5+DWRdZAGbkpb7jhqQAMAnzTA4PWCt/5QGSx+lNiEBJPlkwZ28bDGmByotNWppInoEA3Uk4RxB2cPFnHi2HEMmBg9409HhGZ7P8s2VHS5rhCXY/0EZ6EV7zu4lCGQ2EVkHIqlIrdUArsGCkN5567TctF+HeH71T1aU6b3oY0a6+n0A2D9o2jJDHtjUQzCedEBtwHNT4HMS37ba1H3PHC8uxuLyGB8i6xgKWCMDol+bXNiminwO2Z06pW5dKSg2CdeHaXefnGAOfyrlB7ZYPVylMLcv6/pNlsgm5qVh15ly8R/pW1qNi472WlmTOxcbyiVzjCqD8SgyCmjsH27UaEECP09wHoaldS3gWJ2DcJSHdRmCAnr25NUzobLgYgdtDzpJzzdCNpWmJVTdfi78ekRu5GJkq680rE1W4ecf9WPvExKKqx0nGzp5ieYHWkKcRT4mPlRJY=
-before_script:
-- mkdir ~/.bintray
-- touch ~/.bintray/.credentials
-- echo 'realm = Bintray API Realm' >> ~/.bintray/.credentials
-- echo 'host = api.bintray.com' >> ~/.bintray/.credentials
-- echo "user = $BT_USER" >> ~/.bintray/.credentials
-- echo "password = $BT_KEY" >> ~/.bintray/.credentials
 script:
 - sbt publish
 cache:

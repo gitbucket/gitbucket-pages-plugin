@@ -1,5 +1,5 @@
 
-# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/yaroot/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/yaroot/gitbucket-pages-plugin)
+# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/gitbucket/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/gitbucket/gitbucket-pages-plugin)
 
 This plugin provides *Project Pages* functionality for
 [GitBucket](https://github.com/gitbucket/gitbucket) based repositories.
@@ -21,7 +21,7 @@ site generators ([jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/), etc
 
 ## Installation
 
-- download from [releases](https://github.com/yaroot/gitbucket-pages-plugin/releases)
+- download from [releases](https://github.com/gitbucket/gitbucket-pages-plugin/releases)
 - copy the jar file to `<GITBUCKET_HOME>/plugins/` (Note that `GITBUCKET_HOME` defaults to `~/.gitbucket`)
 - restart gitbucket and enjoy
 
@@ -75,6 +75,5 @@ server {
 
 ## CI
 
-- build by [travis-ci](https://travis-ci.org/yaroot/gitbucket-pages-plugin)
-- pre-release binaries on [bintray](https://dl.bintray.com/yaroot/gitbucket-pages-plugin/gitbucket/)
+- build by [travis-ci](https://travis-ci.org/gitbucket/gitbucket-pages-plugin)
 
