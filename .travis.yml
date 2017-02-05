@@ -2,7 +2,7 @@ language: scala
 jdk:
 - oraclejdk8
 script:
-- sbt publish
+- sbt package
 cache:
   directories:
   - "$HOME/.ivy2"
