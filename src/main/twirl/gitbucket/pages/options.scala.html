@@ -1,0 +1,60 @@
+@import gitbucket.plugin.model.PageSourceType
+@(repository: gitbucket.core.service.RepositoryService.RepositoryInfo,
+    source: PageSourceType,
+    info: Option[Any])(implicit context: gitbucket.core.controller.Context)
+@import gitbucket.core.view.helpers
+@gitbucket.core.html.main("Pages", Some(repository)){
+    @gitbucket.core.html.menu("settings", repository){
+        @gitbucket.core.settings.html.menu("pages", repository){
+            @gitbucket.core.helper.html.information(info)
+            <form id="form" method="post" action="@helpers.url(repository)/settings/pages" validate="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading strong">Source</div>
+                    <div class="panel-body">
+                        <fieldset class="form-group">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="source" value="@PageSourceType.GH_PAGES.code" @if(source == PageSourceType.GH_PAGES) { checked="checked" }>
+                                    <span class="strong">gh-pages branch</span><br>
+                                    <div class="normal muted">
+                                      Use the <code>gh-pages</code> branch for Pages.
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="source" value="@PageSourceType.MASTER.code" @if(source == PageSourceType.MASTER) { checked="checked" }>
+                                    <span class="strong">master branch</span><br>
+                                    <div class="normal muted">
+                                      Use the <code>master</code> branch for Pages.
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="source" value="@PageSourceType.MASTER_DOCS.code" @if(source == PageSourceType.MASTER_DOCS) { checked="checked" }>
+                                    <span class="strong">master branch /docs folder</span><br>
+                                    <div class="normal muted">
+                                      Use only the <code>/docs</code> folder for Pages.
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="source" value="@PageSourceType.NONE.code" @if(source == PageSourceType.NONE) { checked="checked" }>
+                                    <span class="strong">None</span><br>
+                                    <div class="normal muted">
+                                      Disable Pages.
+                                    </div>
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="align-right" style="margin-top: 20px;">
+                    <input type="submit" class="btn btn-success" value="Apply changes"/>
+                </div>
+            </form>
+        }
+    }
+}

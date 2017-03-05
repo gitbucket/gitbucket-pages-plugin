@@ -1,4 +1,7 @@
+import gitbucket.core.controller.Context
 import gitbucket.core.controller.ControllerBase
+import gitbucket.core.plugin.Link
+import gitbucket.core.service.RepositoryService.RepositoryInfo
 import gitbucket.plugin.pages.{ PagesController, PagesHook }
 import io.github.gitbucket.solidbase.migration.{ SqlMigration, LiquibaseMigration }
 import io.github.gitbucket.solidbase.model.Version
@@ -27,6 +30,10 @@ class Plugin extends gitbucket.core.plugin.Plugin {
 
   override val controllers: Seq[(String, ControllerBase)] = Seq(
     "/*" -> new PagesController
+  )
+
+  override val repositorySettingTabs = Seq(
+    (repository: RepositoryInfo, context: Context) => Some(Link("pages", "Pages", s"settings/pages"))
   )
 
   override val repositoryHooks = Seq(

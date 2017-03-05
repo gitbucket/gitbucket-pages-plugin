@@ -4,12 +4,15 @@ import gitbucket.core.controller.ControllerBase
 import gitbucket.core.service.{ AccountService, RepositoryService }
 import gitbucket.core.util.Implicits._
 import gitbucket.core.util.SyntaxSugars._
-import gitbucket.core.util.{ Directory, JGitUtil, ReferrerAuthenticator }
+import gitbucket.core.util.{ Directory, JGitUtil, OwnerAuthenticator, ReferrerAuthenticator }
+import gitbucket.pages.html
 import gitbucket.plugin.model.PageSourceType
 import gitbucket.plugin.service.PagesService
+import io.github.gitbucket.scalatra.forms._
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
+import org.scalatra.i18n.Messages
 
 import scala.annotation.tailrec
 import scala.language.implicitConversions
@@ -17,12 +20,21 @@ import scala.language.implicitConversions
 class PagesController
   extends PagesControllerBase
   with AccountService
+  with OwnerAuthenticator
   with PagesService
   with RepositoryService
   with ReferrerAuthenticator
 
 trait PagesControllerBase extends ControllerBase {
-  self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator =>
+  self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator with OwnerAuthenticator =>
+
+  case class OptionsForm(source: PageSourceType)
+
+  val optionsForm = mapping(
+    "source" -> trim(label("Pages Source", text(required, pagesOption)))
+  )(
+      (source) => OptionsForm(PageSourceType.valueOf(source))
+    )
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
 
@@ -85,6 +97,20 @@ trait PagesControllerBase extends ControllerBase {
     redirect(s"/${repository.owner}/${repository.name}/pages/")
   })
 
+  get("/:owner/:repository/settings/pages")(ownerOnly { repository =>
+    val source = getPageOptions(repository.owner, repository.name) match {
+      case Some(p) => p.source
+      case None => PageSourceType.GH_PAGES
+    }
+    html.options(repository, source, flash.get("info"))
+  })
+
+  post("/:owner/:repository/settings/pages", optionsForm)(ownerOnly { (form, repository) =>
+    updatePageOptions(repository.owner, repository.name, form.source)
+    flash += "info" -> "Pages source saved"
+    redirect(s"/${repository.owner}/${repository.name}/settings/pages")
+  })
+
   @tailrec
   final def resolveBranch(git: Git, names: List[String]): Option[ObjectId] = {
     names match {
@@ -117,5 +143,12 @@ trait PagesControllerBase extends ControllerBase {
 
   def isRoot(path: String) = path == ""
 
+  private def pagesOption: Constraint = new Constraint() {
+    override def validate(name: String, value: String, messages: Messages): Option[String] =
+      PageSourceType.valueOpt(value) match {
+        case Some(_) => None
+        case None => Some("Pages source is invalid.")
+      }
+  }
 }
 
