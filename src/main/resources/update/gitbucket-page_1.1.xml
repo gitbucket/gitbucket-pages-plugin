@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<changeSet>
+    <createTable tableName="PAGES">
+        <column name="USER_NAME" type="varchar(100)" nullable="false"/>
+        <column name="REPOSITORY_NAME" type="varchar(100)" nullable="false"/>
+        <column name="SOURCE" type="varchar(100)" nullable="false"/>
+    </createTable>
+
+    <addPrimaryKey constraintName="IDX_PAGES_PK" tableName="PAGES" columnNames="USER_NAME, REPOSITORY_NAME"/>
+</changeSet>

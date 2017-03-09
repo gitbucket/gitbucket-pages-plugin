@@ -1,5 +1,6 @@
 import gitbucket.core.controller.ControllerBase
 import gitbucket.plugin.pages.PagesController
+import io.github.gitbucket.solidbase.migration.{ SqlMigration, LiquibaseMigration }
 import io.github.gitbucket.solidbase.model.Version
 
 class Plugin extends gitbucket.core.plugin.Plugin {
@@ -16,7 +17,12 @@ class Plugin extends gitbucket.core.plugin.Plugin {
     new Version("0.7"),
     new Version("0.8"),
     new Version("0.9"),
-    new Version("1.0")
+    new Version("1.0"),
+    new Version(
+      "1.1",
+      new LiquibaseMigration("update/gitbucket-page_1.1.xml"),
+      new SqlMigration("update/gitbucket-page_1.1.sql")
+    )
   )
 
   override val controllers: Seq[(String, ControllerBase)] = Seq(
