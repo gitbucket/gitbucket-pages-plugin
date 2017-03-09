@@ -2,12 +2,11 @@ package gitbucket.plugin.pages
 
 import gitbucket.core.controller.ControllerBase
 import gitbucket.core.service.{ AccountService, RepositoryService }
-import gitbucket.core.util.ControlUtil._
+import gitbucket.core.util.SyntaxSugars._
 import gitbucket.core.util.{ Directory, JGitUtil, ReferrerAuthenticator }
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
-import org.eclipse.jgit.treewalk.TreeWalk
 
 import scala.annotation.tailrec
 import scala.language.implicitConversions
@@ -87,20 +86,5 @@ trait PagesControllerBase extends ControllerBase {
 
   def isRoot(path: String) = path == ""
 
-  // copy&paste from RepositoryViewerControllerBase
-  private def getPathObjectId(git: Git, path: String, revCommit: RevCommit): Option[ObjectId] = {
-    @scala.annotation.tailrec
-    def _getPathObjectId(path: String, walk: TreeWalk): Option[ObjectId] = walk.next match {
-      case true if walk.getPathString == path => Some(walk.getObjectId(0))
-      case true => _getPathObjectId(path, walk)
-      case false => None
-    }
-
-    using(new TreeWalk(git.getRepository)) { treeWalk =>
-      treeWalk.addTree(revCommit.getTree)
-      treeWalk.setRecursive(true)
-      _getPathObjectId(path, treeWalk)
-    }
-  }
 }
 

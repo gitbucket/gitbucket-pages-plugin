@@ -9,7 +9,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "io.github.gitbucket"   %%  "gitbucket"           % "4.10.0",
+  "io.github.gitbucket"   %%  "gitbucket"           % "4.11.0",
   "javax.servlet"         %   "javax.servlet-api"   % "3.1.0"
 )
 
