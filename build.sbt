@@ -1,6 +1,6 @@
 organization  := "gitbucket"
 name          := "pages-plugin"
-scalaVersion  := "2.12.0"
+scalaVersion  := "2.12.1"
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
 
 lazy val root = (project in file(".")).enablePlugins(SbtTwirl)
