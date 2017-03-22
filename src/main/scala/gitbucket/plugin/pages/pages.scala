@@ -29,65 +29,24 @@ trait PagesControllerBase extends ControllerBase {
   self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator with OwnerAuthenticator =>
   import PagesControllerBase._
 
-  case class OptionsForm(source: PageSourceType)
-
   val optionsForm = mapping(
     "source" -> trim(label("Pages Source", text(required, pagesOption)))
   )(
-    (source) => OptionsForm(PageSourceType.valueOf(source))
-  )
+      (source) => OptionsForm(PageSourceType.valueOf(source))
+    )
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
 
   get("/:owner/:repository/pages/*")(referrersOnly { repository =>
     val path = params("splat")
     using(Git.open(Directory.getRepositoryDir(repository.owner, repository.name))) { git =>
-
-      def resolvePath(objectId: Option[(String, ObjectId)], path: String) = {
-        objectId match {
-          case Some((path0, objId)) =>
-            // redirect [owner/repo/pages/path] -> [owner/repo/pages/path/]
-            if (shouldRedirect(path, path0)) {
-              redirect(s"/${repository.owner}/${repository.name}/pages/$path/")
-            } else {
-              JGitUtil.getObjectLoaderFromId(git, objId) { loader =>
-                contentType = Option(servletContext.getMimeType(path0)).getOrElse("application/octet-stream")
-                response.setContentLength(loader.getSize.toInt)
-                loader.copyTo(response.getOutputStream)
-              }
-              ()
-            }
-          case None =>
-            NotFound()
-        }
-      }
-
-      val source = getPageOptions(repository.owner, repository.name) match {
-        case Some(p) => p.source
-        case None => PageSourceType.GH_PAGES
-      }
-      source match {
+      getPageSource(repository.owner, repository.name) match {
         case PageSourceType.GH_PAGES =>
-          val objectId = PAGES_BRANCHES.collectFirst(resolveBranch(git, _))
-            .map(JGitUtil.getRevCommitFromId(git, _))
-            .flatMap { revCommit =>
-              getPathIndexObjectId(git, path, revCommit)
-            }
-          resolvePath(objectId, path)
+          renderFromBranch(repository, git, path, PAGES_BRANCHES.collectFirstOpt(resolveBranch(git, _)))
         case PageSourceType.MASTER =>
-          val objectId = Option(git.getRepository.resolve("master"))
-            .map(JGitUtil.getRevCommitFromId(git, _))
-            .flatMap { revCommit =>
-              getPathIndexObjectId(git, path, revCommit)
-            }
-          resolvePath(objectId, path)
+          renderFromBranch(repository, git, path, resolveBranch(git, "master"))
         case PageSourceType.MASTER_DOCS =>
-          val objectId = Option(git.getRepository.resolve("master"))
-            .map(JGitUtil.getRevCommitFromId(git, _))
-            .flatMap { revCommit =>
-              getPathIndexObjectId(git, s"docs/$path", revCommit)
-            }
-          resolvePath(objectId, path)
+          renderFromBranch(repository, git, joinPath("docs", path), resolveBranch(git, "master"))
         case PageSourceType.NONE =>
           NotFound()
       }
@@ -99,10 +58,7 @@ trait PagesControllerBase extends ControllerBase {
   })
 
   get("/:owner/:repository/settings/pages")(ownerOnly { repository =>
-    val source = getPageOptions(repository.owner, repository.name) match {
-      case Some(p) => p.source
-      case None => PageSourceType.GH_PAGES
-    }
+    val source = getPageSource(repository.owner, repository.name)
     html.options(repository, source, flash.get("info"))
   })
 
@@ -112,51 +68,83 @@ trait PagesControllerBase extends ControllerBase {
     redirect(s"/${repository.owner}/${repository.name}/settings/pages")
   })
 
+  def renderPageObject(git: Git, path: String, obj: ObjectId): Unit = {
+    JGitUtil.getObjectLoaderFromId(git, obj) { loader =>
+      contentType = guessContentType(path)
+      response.setContentLength(loader.getSize.toInt)
+      loader.copyTo(response.getOutputStream)
+    }
+  }
+
+  def renderFromBranch(repository: RepositoryService.RepositoryInfo, git: Git, path: String, branchObject: Option[ObjectId]): Any = {
+    val pagePair = branchObject
+      .map(JGitUtil.getRevCommitFromId(git, _))
+      .flatMap(getPageObjectId(git, path, _))
+
+    pagePair match {
+      case Some((realPath, _)) if shouldRedirect(path, realPath) =>
+        redirect(s"/${repository.owner}/${repository.name}/pages/$path/")
+      case Some((realPath, pageObject)) =>
+        renderPageObject(git, realPath, pageObject)
+      case None =>
+        NotFound()
+    }
+  }
+
   def resolveBranch(git: Git, name: String) = Option(git.getRepository.resolve(name))
 
+  // redirect [owner/repo/pages/path] -> [owner/repo/pages/path/]
   def shouldRedirect(path: String, path0: String): Boolean =
     !isRoot(path) && path0 != path && path0.startsWith(path) && !path.endsWith("/")
 
-  def getPathIndexObjectId(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
-    getPathObjectId0(git, path, revCommit)
-      .orElse(getPathObjectId0(git, appendPath(path, "index.html"), revCommit))
-      .orElse(getPathObjectId0(git, appendPath(path, "index.htm"), revCommit))
+  def getPageObjectId(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
+    listProbablePages(path).collectFirstOpt(getPathObjectIdPair(git, _, revCommit))
   }
 
-  def getPathObjectId0(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
+  def listProbablePages(path: String): List[String] = {
+    path :: List("index.html", "index.htm").map(joinPath(path, _))
+  }
+
+  def getPathObjectIdPair(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
     getPathObjectId(git, path, revCommit).map(path -> _)
   }
 
-  def appendPath(base: String, suffix: String): String = {
-    if (isRoot(base)) suffix
-    else if (base.endsWith("/")) base + suffix
-    else base + "/" + suffix
+  def joinPath(base: String, suffix: String): String = {
+    val sfx = suffix.stripPrefix("/")
+    if (isRoot(base)) sfx
+    else base.stripSuffix("/") + "/" + sfx
   }
 
   def isRoot(path: String): Boolean = path == ""
 
-  private def pagesOption: Constraint = new Constraint() {
+  def guessContentType(path: String): String = {
+    Option(servletContext.getMimeType(path)).getOrElse("application/octet-stream")
+  }
+
+}
+
+object PagesControllerBase {
+  case class OptionsForm(source: PageSourceType)
+
+  implicit class listCollectFirst[A](private val lst: List[A]) extends AnyVal {
+    @tailrec
+    final def collectFirstOpt[B](f: A => Option[B]): Option[B] = {
+      lst match {
+        case head :: tail =>
+          f(head) match {
+            case Some(x) => Some(x)
+            case None => tail.collectFirstOpt(f)
+          }
+        case Nil => None
+      }
+    }
+  }
+
+  def pagesOption: Constraint = new Constraint() {
     override def validate(name: String, value: String, messages: Messages): Option[String] =
       PageSourceType.valueOpt(value) match {
         case Some(_) => None
         case None => Some("Pages source is invalid.")
       }
-  }
-}
-
-
-object PagesControllerBase {
-  implicit class listCollectFirst[A](private val lst: List[A]) extends AnyVal {
-    @tailrec
-    final def collectFirst[B](f: A => Option[B]): Option[B] = {
-      lst match {
-        case head :: tail =>
-          f(head) match {
-            case Some(x) => Some(x)
-            case None => tail.collectFirst(f)
-          }
-        case Nil => None
-      }
-    }
   }
 }

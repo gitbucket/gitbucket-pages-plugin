@@ -25,10 +25,7 @@ trait PagesHookBase extends RepositoryHook {
     renameUserName(oldOwner, newOwner, repository)
 
   override def forked(owner: String, newOwner: String, repository: String)(implicit session: Session): Unit = {
-    val source = getPageOptions(owner, repository) match {
-      case Some(p) => p.source
-      case None => PageSourceType.GH_PAGES
-    }
+    val source = getPageSource(owner, repository)
     registerPageOptions(newOwner, repository, source)
   }
 }

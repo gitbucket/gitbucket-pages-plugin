@@ -6,6 +6,9 @@ import gitbucket.plugin.model.Profile.profile.blockingApi._
 
 trait PagesService {
 
+  def getPageSource(userName: String, repositoryName: String)(implicit s: Session): PageSourceType =
+    getPageOptions(userName, repositoryName).map(_.source).getOrElse(PageSourceType.GH_PAGES)
+
   def getPageOptions(userName: String, repositoryName: String)(implicit s: Session): Option[Page] =
     Pages.filter(t => (t.userName === userName.bind) && (t.repositoryName === repositoryName.bind)).firstOption
 
