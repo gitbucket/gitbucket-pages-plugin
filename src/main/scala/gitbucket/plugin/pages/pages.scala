@@ -27,14 +27,15 @@ class PagesController
 
 trait PagesControllerBase extends ControllerBase {
   self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator with OwnerAuthenticator =>
+  import PagesControllerBase._
 
   case class OptionsForm(source: PageSourceType)
 
   val optionsForm = mapping(
     "source" -> trim(label("Pages Source", text(required, pagesOption)))
   )(
-      (source) => OptionsForm(PageSourceType.valueOf(source))
-    )
+    (source) => OptionsForm(PageSourceType.valueOf(source))
+  )
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
 
@@ -67,7 +68,7 @@ trait PagesControllerBase extends ControllerBase {
       }
       source match {
         case PageSourceType.GH_PAGES =>
-          val objectId = resolveBranch(git, PAGES_BRANCHES)
+          val objectId = PAGES_BRANCHES.collectFirst(resolveBranch(git, _))
             .map(JGitUtil.getRevCommitFromId(git, _))
             .flatMap { revCommit =>
               getPathIndexObjectId(git, path, revCommit)
@@ -111,16 +112,7 @@ trait PagesControllerBase extends ControllerBase {
     redirect(s"/${repository.owner}/${repository.name}/settings/pages")
   })
 
-  @tailrec
-  final def resolveBranch(git: Git, names: List[String]): Option[ObjectId] = {
-    names match {
-      case name :: rest =>
-        val objectId = Option(git.getRepository.resolve(name))
-        if (objectId.isEmpty) resolveBranch(git, rest)
-        else objectId
-      case Nil => None
-    }
-  }
+  def resolveBranch(git: Git, name: String) = Option(git.getRepository.resolve(name))
 
   def shouldRedirect(path: String, path0: String) =
     !isRoot(path) && path0 != path && path0.startsWith(path) && !path.endsWith("/")
@@ -152,3 +144,19 @@ trait PagesControllerBase extends ControllerBase {
   }
 }
 
+
+object PagesControllerBase {
+  implicit class listCollectFirst[A](private val lst: List[A]) extends AnyVal {
+    @tailrec
+    final def collectFirst[B](f: A => Option[B]): Option[B] = {
+      lst match {
+        case head :: tail =>
+          f(head) match {
+            case Some(x) => Some(x)
+            case None => tail.collectFirst(f)
+          }
+        case Nil => None
+      }
+    }
+  }
+}
