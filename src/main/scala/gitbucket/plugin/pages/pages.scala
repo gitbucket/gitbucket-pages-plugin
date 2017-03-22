@@ -114,16 +114,16 @@ trait PagesControllerBase extends ControllerBase {
 
   def resolveBranch(git: Git, name: String) = Option(git.getRepository.resolve(name))
 
-  def shouldRedirect(path: String, path0: String) =
+  def shouldRedirect(path: String, path0: String): Boolean =
     !isRoot(path) && path0 != path && path0.startsWith(path) && !path.endsWith("/")
 
-  def getPathIndexObjectId(git: Git, path: String, revCommit: RevCommit) = {
+  def getPathIndexObjectId(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
     getPathObjectId0(git, path, revCommit)
       .orElse(getPathObjectId0(git, appendPath(path, "index.html"), revCommit))
       .orElse(getPathObjectId0(git, appendPath(path, "index.htm"), revCommit))
   }
 
-  def getPathObjectId0(git: Git, path: String, revCommit: RevCommit) = {
+  def getPathObjectId0(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
     getPathObjectId(git, path, revCommit).map(path -> _)
   }
 
@@ -133,7 +133,7 @@ trait PagesControllerBase extends ControllerBase {
     else base + "/" + suffix
   }
 
-  def isRoot(path: String) = path == ""
+  def isRoot(path: String): Boolean = path == ""
 
   private def pagesOption: Constraint = new Constraint() {
     override def validate(name: String, value: String, messages: Messages): Option[String] =
