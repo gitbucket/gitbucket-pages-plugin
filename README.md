@@ -6,12 +6,17 @@ This plugin provides *Project Pages* functionality for
 
 ## User guide
 
-This plugin can serve static files from a special orphan branch called `gb-pages` under
-`<base url>/<user>/<project>/pages/`. (fallback to `gh-pages` if it exists)
+This plugin serves static files directly from one of the following
+place:
+
+- `gb-pages` branch (with fallback to `gh-pages` to be compatible with
+  github, this is the default)
+- `master` branch
+- `docs` folder under `master` branch
 
 ### Quick start
 
-- create an orphan branch called `gb-pages` using `git checkout --orphan gb-pages && git rm -f $(git ls-files)`
+- create directory or branch if necessary (eg. create an orphan branch called `gb-pages`: `git checkout --orphan gb-pages && git rm -f $(git ls-files)`)
 - create a static site under this branch. E.g. `echo '<h1>hello, world</h1>' > index.html` to create a simple file.
 - commit && push to gitbucket this orphan branch
 - open the browser and point to `<your repo url>/pages`
@@ -29,8 +34,9 @@ site generators ([jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/), etc
 
 | pages version | gitbucket version |
 |     :---:     |       :---:       |
-| 1.0           | 4.11              |
-| 0.9           | 4.9, 4.10         |
+| 1.1           | 4.11              |
+| 1.0           | 4.10              |
+| 0.9           | 4.9               |
 | 0.8           | 4.6               |
 | 0.7           | 4.3 ~ 4.6         |
 | 0.6           | 4.2.x             |
