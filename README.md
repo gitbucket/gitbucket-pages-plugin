@@ -7,7 +7,7 @@ This plugin provides *Project Pages* functionality for
 ## User guide
 
 This plugin serves static files directly from one of the following
-place:
+places:
 
 - `gb-pages` branch (with fallback to `gh-pages` to be compatible with
   github, this is the default)
@@ -16,18 +16,18 @@ place:
 
 ### Quick start
 
-- create directory or branch if necessary (eg. create an orphan branch called `gb-pages`: `git checkout --orphan gb-pages && git rm -f $(git ls-files)`)
+- create a directory or branch if necessary (eg. create an orphan branch called `gb-pages`: `git checkout --orphan gb-pages && git rm -f $(git ls-files)`)
 - create a static site under this branch. E.g. `echo '<h1>hello, world</h1>' > index.html` to create a simple file.
 - commit && push to gitbucket this orphan branch
 - open the browser and point to `<your repo url>/pages`
 
-**Note**: This plugin won't render markdown content. To render markdown content, use the wiki or one of the many static
+**Note**: This plugin won't render markdown content. To render markdown content, use the GitBucket Wiki functionality, or just one of the many static
 site generators ([jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/), etc)
 
 ## Installation
 
 - download from [releases](https://github.com/gitbucket/gitbucket-pages-plugin/releases)
-- copy the jar file to `<GITBUCKET_HOME>/plugins/` (Note that `GITBUCKET_HOME` defaults to `~/.gitbucket`)
+- copy the jar file to `<GITBUCKET_HOME>/plugins/` (Note that `GITBUCKET_HOME` defaults to `~/.gitbucket` if not changed otherwise)
 - restart gitbucket and enjoy
 
 ## Versions
