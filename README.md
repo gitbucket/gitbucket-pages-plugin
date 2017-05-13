@@ -34,6 +34,7 @@ site generators ([jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/), etc
 
 | pages version | gitbucket version |
 |     :---:     |       :---:       |
+| 1.2           | 4.12.1            |
 | 1.1           | 4.11              |
 | 1.0           | 4.10              |
 | 0.9           | 4.9               |
