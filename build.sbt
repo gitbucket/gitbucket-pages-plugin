@@ -1,6 +1,5 @@
 organization  := "gitbucket"
 name          := "pages-plugin"
-version       := "1.2"
 scalaVersion  := "2.12.2"
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
 
@@ -17,4 +16,3 @@ libraryDependencies ++= Seq(
   "com.typesafe.play"     %%  "twirl-compiler"      % "1.3.2"
 )
 
-useJCenter := true
