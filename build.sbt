@@ -14,7 +14,7 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "io.github.gitbucket"   %%  "gitbucket"           % "4.13.0",
   "javax.servlet"         %   "javax.servlet-api"   % "3.1.0",
-  "com.typesafe.play"     %%  "twirl-compiler"      % "1.3.0"
+  "com.typesafe.play"     %%  "twirl-compiler"      % "1.3.2"
 )
 
 useJCenter := true
