@@ -26,7 +26,8 @@ class Plugin extends gitbucket.core.plugin.Plugin {
       new LiquibaseMigration("update/gitbucket-page_1.1.xml"),
       new SqlMigration("update/gitbucket-page_1.1.sql")
     ),
-    new Version("1.2")
+    new Version("1.2"),
+    new Version("1.3")
   )
 
   override val controllers: Seq[(String, ControllerBase)] = Seq(
