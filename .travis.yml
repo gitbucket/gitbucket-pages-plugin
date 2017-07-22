@@ -3,7 +3,7 @@ jdk:
 - oraclejdk8
 script:
 - sbt package
-- cp target/scala-*/*.jar pages.jar
+- cp target/scala-*/*.jar .
 cache:
   directories:
   - "$HOME/.ivy2"
@@ -12,7 +12,8 @@ deploy:
   provider: releases
   api_key:
     secure: tTBYdvgVQ2HCSuUSAhCEPaxgfll24nFDDLINaf32ZQMhvyih3/BJ9v/T423xnXNjSa2+yaNDwt4VigWqDdiTD6jj5HfanV0rDwXE+WkfOZoc6+u2Vi8VczmxI16RLJrnFizfgq5KDrBxorqs++0+qB/fCj+aBIGYW4Aga12oR2mZHjq4ujVzUf2QncP5FoZjtK6EwTVqxP/Ep/lsi0Qa1oNl3xuq1+Li9VaZX3odw8lQCpAWUxaVpHuAcZZTZKzxdUg4pRSyMCtlXIGG/OYHMrChLJBv5+qnTZw6SvzVFhL6zX3BWf7VPHGdVxNroG7PybZCvvt8Mg9BnhcPX3gDDYulk60vBNPKBA1/F5idXNvT+4eOYCTNKz0saSA4cnIheC4WgpcCaa3lbot7RNd3tTuJApAcjuKyeTOGv8qhfxWyUzYyusWK+inGSUgmuNr4RKaBnwN9rkLFFYIV66bbhtsIFRkxw8zLgN974FE7hEyOiJxElRdDpJUEBP/4EBmHqhOLW9ahjZ+rX0qCqjB2JidNhVdTeNYDqjCxVMowwyX6LOg6y93VXldbmyV/4hMYb2/sAgzG9nxj7S2+/WLH7oSOwr4tCMMgFBXgYMyqXSNVBNoSzoL5TiAe9F4c3JnzQGyijLIHsE+EanxBJwdD1pf4MaR8iebmSRX3uYuRab4=
-  file: pages.jar
+  file_glob: true
+  file: gitbucket-pages-plugin_*.jar
   skip_cleanup: true
   on:
     repo: gitbucket/gitbucket-pages-plugin
