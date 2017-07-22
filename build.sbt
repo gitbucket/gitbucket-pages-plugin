@@ -3,7 +3,7 @@ name          := "pages-plugin"
 scalaVersion  := "2.12.2"
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
 
-lazy val root = (project in file(".")).enablePlugins(SbtTwirl)
+enablePlugins(SbtTwirl)
 
 resolvers ++= Seq(
   Resolver.jcenterRepo,
@@ -12,7 +12,6 @@ resolvers ++= Seq(
 
 libraryDependencies ++= Seq(
   "io.github.gitbucket"   %%  "gitbucket"           % "4.14.1",
-  "javax.servlet"         %   "javax.servlet-api"   % "3.1.0",
-  "com.typesafe.play"     %%  "twirl-compiler"      % "1.3.2"
+  "javax.servlet"         %   "javax.servlet-api"   % "3.1.0"
 )
 
