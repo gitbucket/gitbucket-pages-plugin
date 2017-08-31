@@ -64,7 +64,7 @@ server {
     }
 
     location / {
-        proxy_pass 127.0.0.1:8080;
+        proxy_pass http://127.0.0.1:8080;
     }
 }
 
@@ -73,7 +73,7 @@ server {
     server_name doc.local;
 
     location ~ ^/([^/]+)/([^/]+)/pages/(.*)$ {
-        proxy_pass 127.0.0.1:8080;
+        proxy_pass http://127.0.0.1:8080;
     }
 
     location / {
