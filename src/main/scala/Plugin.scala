@@ -9,7 +9,7 @@ import io.github.gitbucket.solidbase.model.Version
 class Plugin extends gitbucket.core.plugin.Plugin {
   override val pluginId = "pages"
   override val pluginName = "Pages Plugin"
-  override val description = "Project pages for gitbucket"
+  override val description = "Project pages for GitBucket"
   override val versions = List(
     new Version("0.1"),
     new Version("0.2"),
