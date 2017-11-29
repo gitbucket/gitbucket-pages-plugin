@@ -8,7 +8,7 @@ import gitbucket.core.util.{ Directory, JGitUtil, OwnerAuthenticator, ReferrerAu
 import gitbucket.pages.html
 import gitbucket.plugin.model.PageSourceType
 import gitbucket.plugin.service.PagesService
-import io.github.gitbucket.scalatra.forms._
+import org.scalatra.forms._
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
