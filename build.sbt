@@ -1,6 +1,6 @@
 organization  := "gitbucket"
 name          := "gitbucket-pages-plugin"
-scalaVersion  := "2.12.2"
+scalaVersion  := "2.12.4"
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
 
 enablePlugins(SbtTwirl)
