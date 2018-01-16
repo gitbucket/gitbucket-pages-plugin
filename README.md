@@ -21,14 +21,18 @@ places:
 - commit && push to gitbucket this orphan branch
 - open the browser and point to `<your repo url>/pages`
 
-**Note**: This plugin won't render markdown content. To render markdown content, use the GitBucket Wiki functionality, or just one of the many static
-site generators ([jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/), etc)
+**Note**: This plugin won't render markdown content. To render markdown content, use the GitBucket Wiki functionality, or use one of the many static site generators (e.g. [jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/))
 
 ## Installation
 
+**This plugin is bundled with newer version of GitBucket, for older
+version please follow the instruction below**
+
+### Install manually
+
 - download from [releases](https://github.com/gitbucket/gitbucket-pages-plugin/releases)
-- copy the jar file to `<GITBUCKET_HOME>/plugins/` (Note that `GITBUCKET_HOME` defaults to `~/.gitbucket` if not changed otherwise)
-- restart gitbucket and enjoy
+- copy the jar file to `<GITBUCKET_HOME>/plugins/` (`GITBUCKET_HOME` defaults to `~/.gitbucket`)
+- enable it in plugin settings (you may need to restart gitbucket)
 
 ## Versions
 
