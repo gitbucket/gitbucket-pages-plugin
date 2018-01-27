@@ -30,10 +30,8 @@ trait PagesControllerBase extends ControllerBase {
   import PagesControllerBase._
 
   val optionsForm = mapping(
-    "source" -> trim(label("Pages Source", text(required, pagesOption)))
-  )(
-      (source) => OptionsForm(PageSourceType.valueOf(source))
-    )
+    "source" -> trim(label("Pages Source", text(required, pagesOption))))(
+      (source) => OptionsForm(PageSourceType.valueOf(source)))
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
 

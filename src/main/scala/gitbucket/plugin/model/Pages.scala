@@ -36,5 +36,4 @@ object PageSourceType {
 case class Page(
   userName: String,
   repositoryName: String,
-  source: PageSourceType
-)
+  source: PageSourceType)
