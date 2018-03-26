@@ -1,6 +1,7 @@
 package gitbucket.plugin.pages
 
 import gitbucket.core.controller.ControllerBase
+import gitbucket.core.service.RepositoryService.RepositoryInfo
 import gitbucket.core.service.{ AccountService, RepositoryService }
 import gitbucket.core.util.Implicits._
 import gitbucket.core.util.SyntaxSugars._
@@ -36,7 +37,14 @@ trait PagesControllerBase extends ControllerBase {
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
 
   get("/:owner/:repository/pages/*")(referrersOnly { repository =>
-    val path = params("splat")
+    renderPage(repository, params("splat"))
+  })
+
+  get("/:owner/:repository/pages")(referrersOnly { repository =>
+    renderPage(repository, "")
+  })
+
+  private def renderPage(repository: RepositoryInfo, path: String) = {
     using(Git.open(Directory.getRepositoryDir(repository.owner, repository.name))) { git =>
       getPageSource(repository.owner, repository.name) match {
         case PageSourceType.GH_PAGES =>
@@ -49,11 +57,7 @@ trait PagesControllerBase extends ControllerBase {
           NotFound()
       }
     }
-  })
-
-  get("/:owner/:repository/pages")(referrersOnly { repository =>
-    redirect(s"/${repository.owner}/${repository.name}/pages/")
-  })
+  }
 
   get("/:owner/:repository/settings/pages")(ownerOnly { repository =>
     val source = getPageSource(repository.owner, repository.name)
