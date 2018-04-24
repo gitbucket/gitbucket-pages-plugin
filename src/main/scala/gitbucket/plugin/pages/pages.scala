@@ -2,10 +2,10 @@ package gitbucket.plugin.pages
 
 import gitbucket.core.controller.ControllerBase
 import gitbucket.core.service.RepositoryService.RepositoryInfo
-import gitbucket.core.service.{ AccountService, RepositoryService }
+import gitbucket.core.service.{AccountService, RepositoryService}
 import gitbucket.core.util.Implicits._
 import gitbucket.core.util.SyntaxSugars._
-import gitbucket.core.util.{ Directory, JGitUtil, OwnerAuthenticator, ReferrerAuthenticator }
+import gitbucket.core.util.{Directory, JGitUtil, OwnerAuthenticator, ReferrerAuthenticator}
 import gitbucket.pages.html
 import gitbucket.plugin.model.PageSourceType
 import gitbucket.plugin.service.PagesService
@@ -19,20 +19,20 @@ import scala.annotation.tailrec
 import scala.language.implicitConversions
 
 class PagesController
-  extends PagesControllerBase
-  with AccountService
-  with OwnerAuthenticator
-  with PagesService
-  with RepositoryService
-  with ReferrerAuthenticator
+    extends PagesControllerBase
+    with AccountService
+    with OwnerAuthenticator
+    with PagesService
+    with RepositoryService
+    with ReferrerAuthenticator
 
 trait PagesControllerBase extends ControllerBase {
   self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator with OwnerAuthenticator =>
   import PagesControllerBase._
 
-  val optionsForm = mapping(
-    "source" -> trim(label("Pages Source", text(required, pagesOption))))(
-      (source) => OptionsForm(PageSourceType.valueOf(source)))
+  val optionsForm = mapping("source" -> trim(label("Pages Source", text(required, pagesOption))))(
+    (source) => OptionsForm(PageSourceType.valueOf(source))
+  )
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
 
@@ -78,7 +78,12 @@ trait PagesControllerBase extends ControllerBase {
     }
   }
 
-  def renderFromBranch(repository: RepositoryService.RepositoryInfo, git: Git, path: String, branchObject: Option[ObjectId]): Any = {
+  def renderFromBranch(
+    repository: RepositoryService.RepositoryInfo,
+    git: Git,
+    path: String,
+    branchObject: Option[ObjectId]
+  ): Any = {
     val pagePair = branchObject
       .map(JGitUtil.getRevCommitFromId(git, _))
       .flatMap(getPageObjectId(git, path, _))
@@ -135,7 +140,7 @@ object PagesControllerBase {
         case head :: tail =>
           f(head) match {
             case Some(x) => Some(x)
-            case None => tail.collectFirstOpt(f)
+            case None    => tail.collectFirstOpt(f)
           }
         case Nil => None
       }
@@ -146,7 +151,7 @@ object PagesControllerBase {
     override def validate(name: String, value: String, messages: Messages): Option[String] =
       PageSourceType.valueOpt(value) match {
         case Some(_) => None
-        case None => Some("Pages source is invalid.")
+        case None    => Some("Pages source is invalid.")
       }
   }
 }

@@ -5,9 +5,7 @@ import gitbucket.plugin.model.PageSourceType
 import gitbucket.plugin.model.Profile.profile.blockingApi._
 import gitbucket.plugin.service.PagesService
 
-class PagesHook
-  extends PagesHookBase
-  with PagesService
+class PagesHook extends PagesHookBase with PagesService
 
 trait PagesHookBase extends RepositoryHook {
   self: PagesService =>

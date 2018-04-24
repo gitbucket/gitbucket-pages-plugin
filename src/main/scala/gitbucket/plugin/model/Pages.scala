@@ -3,7 +3,8 @@ package gitbucket.plugin.model
 trait PagesComponent { self: gitbucket.core.model.Profile =>
   import profile.api._
 
-  implicit val psColumnType = MappedColumnType.base[PageSourceType, String](ps => ps.code, code => PageSourceType.valueOf(code))
+  implicit val psColumnType =
+    MappedColumnType.base[PageSourceType, String](ps => ps.code, code => PageSourceType.valueOf(code))
 
   lazy val Pages = TableQuery[Pages]
 
@@ -33,7 +34,4 @@ object PageSourceType {
   def valueOpt(code: String): Option[PageSourceType] = map.get(code)
 }
 
-case class Page(
-  userName: String,
-  repositoryName: String,
-  source: PageSourceType)
+case class Page(userName: String, repositoryName: String, source: PageSourceType)

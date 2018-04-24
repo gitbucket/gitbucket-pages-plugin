@@ -1,6 +1,6 @@
 package gitbucket.plugin.service
 
-import gitbucket.plugin.model.{ Page, PageSourceType }
+import gitbucket.plugin.model.{Page, PageSourceType}
 import gitbucket.plugin.model.Profile._
 import gitbucket.plugin.model.Profile.profile.blockingApi._
 
@@ -21,7 +21,9 @@ trait PagesService {
       .map(t => t.source)
       .update(source)
 
-  def renameRepository(userName: String, oldRepositoryName: String, newRepositoryName: String)(implicit s: Session): Unit =
+  def renameRepository(userName: String, oldRepositoryName: String, newRepositoryName: String)(
+    implicit s: Session
+  ): Unit =
     Pages
       .filter(t => (t.userName === userName.bind) && (t.repositoryName === oldRepositoryName.bind))
       .map(t => t.repositoryName)
