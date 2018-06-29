@@ -2,6 +2,10 @@ language: scala
 jdk:
 - oraclejdk8
 script:
+- git clone https://github.com/gitbucket/gitbucket.git
+- cd gitbucket
+- sbt publishLocal
+- cd ../
 - sbt scalafmtCheck scalafmtSbtCheck assembly
 - cp target/scala-*/*.jar .
 cache:
