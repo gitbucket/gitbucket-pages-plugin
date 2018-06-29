@@ -30,7 +30,7 @@ version please follow the instruction below**
 
 ### Install manually
 
-- download from [releases](https://github.com/gitbucket/gitbucket-pages-plugin/releases)
+- download from [plugin registry](https://plugins.gitbucket-community.org/releases/gitbucket-pages-plugin)
 - copy the jar file to `<GITBUCKET_HOME>/plugins/` (`GITBUCKET_HOME` defaults to `~/.gitbucket`)
 - enable it in plugin settings (you may need to restart gitbucket)
 
