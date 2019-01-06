@@ -1,5 +1,5 @@
 
-# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/gitbucket/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/gitbucket/gitbucket-pages-plugin)
+# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/gitbucket/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/gitbucket/gitbucket-pages-plugin) [![GitBucket Plugins](https://plugins.gitbucket-community.org/badge/gitbucket-pages-plugin/latest.svg)](https://plugins.gitbucket-community.org/repos/gitbucket-pages-plugin)
 
 This plugin provides *Project Pages* functionality for
 [GitBucket](https://github.com/gitbucket/gitbucket) based repositories.
