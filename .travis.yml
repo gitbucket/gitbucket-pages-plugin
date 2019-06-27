@@ -1,6 +1,7 @@
 language: scala
 jdk:
-- oraclejdk8
+- openjdk8
+- openjdk11
 script:
 - git clone https://github.com/gitbucket/gitbucket.git
 - cd gitbucket
