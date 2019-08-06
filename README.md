@@ -1,5 +1,5 @@
 
-# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/gitbucket/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/gitbucket/gitbucket-pages-plugin) [![GitBucket Plugins](https://plugins.gitbucket-community.org/badge/gitbucket-pages-plugin/latest.svg)](https://plugins.gitbucket-community.org/repos/gitbucket-pages-plugin)
+# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![Travis](https://img.shields.io/travis/gitbucket/gitbucket-pages-plugin.svg?style=flat-square)](https://travis-ci.org/gitbucket/gitbucket-pages-plugin)
 
 This plugin provides *Project Pages* functionality for
 [GitBucket](https://github.com/gitbucket/gitbucket) based repositories.
@@ -30,7 +30,7 @@ version please follow the instruction below**
 
 ### Install manually
 
-- download from [plugin registry](https://plugins.gitbucket-community.org/releases/gitbucket-pages-plugin)
+- download from [releases](https://github.com/gitbucket/gitbucket-pages-plugin/releases)
 - copy the jar file to `<GITBUCKET_HOME>/plugins/` (`GITBUCKET_HOME` defaults to `~/.gitbucket`)
 - enable it in plugin settings (you may need to restart gitbucket)
 
@@ -38,6 +38,7 @@ version please follow the instruction below**
 
 | pages version | gitbucket version |
 |     :---:     |       :---:       |
+| 1.8.0         | 4.32.0            |
 | 1.7.0         | 4.23.0            |
 | 1.6.0         | 4.19.0            |
 | 1.5.0         | 4.15.0            |
