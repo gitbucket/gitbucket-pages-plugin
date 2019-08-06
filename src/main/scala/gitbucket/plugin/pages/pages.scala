@@ -4,7 +4,6 @@ import gitbucket.core.controller.ControllerBase
 import gitbucket.core.service.RepositoryService.RepositoryInfo
 import gitbucket.core.service.{AccountService, RepositoryService}
 import gitbucket.core.util.Implicits._
-import gitbucket.core.util.SyntaxSugars._
 import gitbucket.core.util.{Directory, JGitUtil, OwnerAuthenticator, ReferrerAuthenticator}
 import gitbucket.pages.html
 import gitbucket.plugin.model.PageSourceType
@@ -14,6 +13,7 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
 import org.scalatra.i18n.Messages
+import scala.util.Using
 
 import scala.annotation.tailrec
 import scala.language.implicitConversions
@@ -45,7 +45,7 @@ trait PagesControllerBase extends ControllerBase {
   })
 
   private def renderPage(repository: RepositoryInfo, path: String) = {
-    using(Git.open(Directory.getRepositoryDir(repository.owner, repository.name))) { git =>
+    Using.resource(Git.open(Directory.getRepositoryDir(repository.owner, repository.name))) { git =>
       getPageSource(repository.owner, repository.name) match {
         case PageSourceType.GH_PAGES =>
           renderFromBranch(repository, git, path, PAGES_BRANCHES.collectFirstOpt(resolveBranch(git, _)))
@@ -66,7 +66,7 @@ trait PagesControllerBase extends ControllerBase {
 
   post("/:owner/:repository/settings/pages", optionsForm)(ownerOnly { (form, repository) =>
     updatePageOptions(repository.owner, repository.name, form.source)
-    flash += "info" -> "Pages source saved"
+    flash.update("info", "Pages source saved")
     redirect(s"/${repository.owner}/${repository.name}/settings/pages")
   })
 
