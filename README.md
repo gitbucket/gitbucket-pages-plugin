@@ -1,5 +1,5 @@
 
-# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg?style=flat-square)](https://gitter.im/gitbucket/gitbucket) [![build](https://github.com/gitbucket/gitbucket-pages-plugin/workflows/build/badge.svg?branch=master)](https://github.com/gitbucket/gitbucket-pages-plugin/actions?query=workflow%3Abuild+branch%3Amaster)
+# Gitbucket-Pages-Plugin [![Gitter](https://img.shields.io/gitter/room/gitbucket/gitbucket.js.svg)](https://gitter.im/gitbucket/gitbucket) [![build](https://github.com/gitbucket/gitbucket-pages-plugin/workflows/build/badge.svg?branch=master)](https://github.com/gitbucket/gitbucket-pages-plugin/actions?query=workflow%3Abuild+branch%3Amaster)
 
 This plugin provides *Project Pages* functionality for
 [GitBucket](https://github.com/gitbucket/gitbucket) based repositories.
