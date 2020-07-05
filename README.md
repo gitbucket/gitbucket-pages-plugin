@@ -92,5 +92,4 @@ server {
 
 ## CI
 
-- build by [travis-ci](https://travis-ci.org/gitbucket/gitbucket-pages-plugin)
-
+- build by [GitHub Actions](https://github.com/gitbucket/gitbucket-pages-plugin/actions)
