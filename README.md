@@ -38,6 +38,7 @@ version please follow the instruction below**
 
 | pages version | gitbucket version |
 |     :---:     |       :---:       |
+| 1.9.0         | 4.35.0            |
 | 1.8.0         | 4.32.0            |
 | 1.7.0         | 4.23.0            |
 | 1.6.0         | 4.19.0            |

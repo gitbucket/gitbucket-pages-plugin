@@ -12,7 +12,7 @@ trait PagesComponent { self: gitbucket.core.model.Profile =>
     val userName = column[String]("USER_NAME")
     val repositoryName = column[String]("REPOSITORY_NAME")
     val source = column[PageSourceType]("SOURCE")
-    def * = (userName, repositoryName, source) <> ((Page.apply _).tupled, Page.unapply)
+    def * = (userName, repositoryName, source).<>((Page.apply _).tupled, Page.unapply)
   }
 }
 
