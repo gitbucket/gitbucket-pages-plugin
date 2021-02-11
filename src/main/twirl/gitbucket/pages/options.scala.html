@@ -1,6 +1,7 @@
 @import gitbucket.plugin.model.PageSourceType
 @(repository: gitbucket.core.service.RepositoryService.RepositoryInfo,
     source: PageSourceType,
+    defaultBranch: String,
     info: Option[Any])(implicit context: gitbucket.core.controller.Context)
 @import gitbucket.core.view.helpers
 @gitbucket.core.html.main("Pages", Some(repository)){
@@ -24,16 +25,16 @@
                             <div class="radio">
                                 <label>
                                     <input type="radio" name="source" value="@PageSourceType.MASTER.code" @if(source == PageSourceType.MASTER) { checked="checked" }>
-                                    <span class="strong">master branch</span><br>
+                                    <span class="strong">default branch</span><br>
                                     <div class="normal muted">
-                                      Use the <code>master</code> branch for Pages.
+                                      Use the <code>@defaultBranch</code> branch for Pages.
                                     </div>
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
                                     <input type="radio" name="source" value="@PageSourceType.MASTER_DOCS.code" @if(source == PageSourceType.MASTER_DOCS) { checked="checked" }>
-                                    <span class="strong">master branch /docs folder</span><br>
+                                    <span class="strong">default branch /docs folder</span><br>
                                     <div class="normal muted">
                                       Use only the <code>/docs</code> folder for Pages.
                                     </div>

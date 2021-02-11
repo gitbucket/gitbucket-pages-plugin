@@ -21,8 +21,8 @@ trait PagesService {
       .map(t => t.source)
       .update(source)
 
-  def renameRepository(userName: String, oldRepositoryName: String, newRepositoryName: String)(
-    implicit s: Session
+  def renameRepository(userName: String, oldRepositoryName: String, newRepositoryName: String)(implicit
+    s: Session
   ): Unit =
     Pages
       .filter(t => (t.userName === userName.bind) && (t.repositoryName === oldRepositoryName.bind))

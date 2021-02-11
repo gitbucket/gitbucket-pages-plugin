@@ -30,8 +30,8 @@ trait PagesControllerBase extends ControllerBase {
   self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator with OwnerAuthenticator =>
   import PagesControllerBase._
 
-  val optionsForm = mapping("source" -> trim(label("Pages Source", text(required, pagesOption))))(
-    (source) => OptionsForm(PageSourceType.valueOf(source))
+  val optionsForm = mapping("source" -> trim(label("Pages Source", text(required, pagesOption))))((source) =>
+    OptionsForm(PageSourceType.valueOf(source))
   )
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
@@ -45,14 +45,15 @@ trait PagesControllerBase extends ControllerBase {
   })
 
   private def renderPage(repository: RepositoryInfo, path: String) = {
+    val defaultBranch = repository.repository.defaultBranch
     Using.resource(Git.open(Directory.getRepositoryDir(repository.owner, repository.name))) { git =>
       getPageSource(repository.owner, repository.name) match {
         case PageSourceType.GH_PAGES =>
           renderFromBranch(repository, git, path, PAGES_BRANCHES.collectFirstOpt(resolveBranch(git, _)))
         case PageSourceType.MASTER =>
-          renderFromBranch(repository, git, path, resolveBranch(git, "master"))
+          renderFromBranch(repository, git, path, resolveBranch(git, defaultBranch))
         case PageSourceType.MASTER_DOCS =>
-          renderFromBranch(repository, git, joinPath("docs", path), resolveBranch(git, "master"))
+          renderFromBranch(repository, git, joinPath("docs", path), resolveBranch(git, defaultBranch))
         case PageSourceType.NONE =>
           NotFound()
       }
@@ -61,7 +62,8 @@ trait PagesControllerBase extends ControllerBase {
 
   get("/:owner/:repository/settings/pages")(ownerOnly { repository =>
     val source = getPageSource(repository.owner, repository.name)
-    html.options(repository, source, flash.get("info"))
+    val defaultBranch = repository.repository.defaultBranch
+    html.options(repository, source, defaultBranch, flash.get("info"))
   })
 
   post("/:owner/:repository/settings/pages", optionsForm)(ownerOnly { (form, repository) =>
