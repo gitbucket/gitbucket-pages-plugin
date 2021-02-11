@@ -39,9 +39,8 @@ class Plugin extends gitbucket.core.plugin.Plugin {
 
   override val controllers: Seq[(String, ControllerBase)] = Seq("/*" -> new PagesController)
 
-  override val repositorySettingTabs = Seq(
-    (repository: RepositoryInfo, context: Context) => Some(Link("pages", "Pages", s"settings/pages"))
-  )
+  override val repositorySettingTabs =
+    Seq((repository: RepositoryInfo, context: Context) => Some(Link("pages", "Pages", s"settings/pages")))
 
   override val repositoryHooks = Seq(new PagesHook)
 }
