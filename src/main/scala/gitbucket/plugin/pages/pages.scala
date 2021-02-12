@@ -30,8 +30,8 @@ trait PagesControllerBase extends ControllerBase {
   self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator with OwnerAuthenticator =>
   import PagesControllerBase._
 
-  val optionsForm = mapping("source" -> trim(label("Pages Source", text(required, pagesOption))))((source) =>
-    OptionsForm(PageSourceType.valueOf(source))
+  val optionsForm = mapping("source" -> trim(label("Pages Source", text(required, pagesOption))))(
+    (source) => OptionsForm(PageSourceType.valueOf(source))
   )
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
@@ -41,7 +41,7 @@ trait PagesControllerBase extends ControllerBase {
   })
 
   get("/:owner/:repository/pages")(referrersOnly { repository =>
-    renderPage(repository, "")
+    redirect(s"/${repository.owner}/${repository.name}/pages/")
   })
 
   private def renderPage(repository: RepositoryInfo, path: String) = {
