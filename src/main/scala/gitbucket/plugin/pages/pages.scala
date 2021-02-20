@@ -13,8 +13,9 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
 import org.scalatra.i18n.Messages
-import scala.util.Using
 
+import javax.servlet.http.HttpServletRequest
+import scala.util.Using
 import scala.annotation.tailrec
 import scala.language.implicitConversions
 
@@ -30,18 +31,24 @@ trait PagesControllerBase extends ControllerBase {
   self: AccountService with RepositoryService with PagesService with ReferrerAuthenticator with OwnerAuthenticator =>
   import PagesControllerBase._
 
-  val optionsForm = mapping("source" -> trim(label("Pages Source", text(required, pagesOption))))((source) =>
-    OptionsForm(PageSourceType.valueOf(source))
-  )
+  val optionsForm: MappingValueType[OptionsForm] = mapping(
+    "source" -> trim(label("Pages Source", text(required, pagesOption)))
+  )(source => OptionsForm(PageSourceType.valueOf(source)))
 
   val PAGES_BRANCHES = List("gb-pages", "gh-pages")
+
+  def endsWithSlash(): Boolean = request.getServletPath.endsWith("/")
 
   get("/:owner/:repository/pages/*")(referrersOnly { repository =>
     renderPage(repository, params("splat"))
   })
 
   get("/:owner/:repository/pages")(referrersOnly { repository =>
-    renderPage(repository, "")
+    if (endsWithSlash()) {
+      renderPage(repository, "")
+    } else {
+      redirect(s"/${repository.owner}/${repository.name}/pages/")
+    }
   })
 
   private def renderPage(repository: RepositoryInfo, path: String) = {
@@ -49,7 +56,7 @@ trait PagesControllerBase extends ControllerBase {
     Using.resource(Git.open(Directory.getRepositoryDir(repository.owner, repository.name))) { git =>
       getPageSource(repository.owner, repository.name) match {
         case PageSourceType.GH_PAGES =>
-          renderFromBranch(repository, git, path, PAGES_BRANCHES.collectFirstOpt(resolveBranch(git, _)))
+          renderFromBranch(repository, git, path, PAGES_BRANCHES.collectFirst(Function.unlift(resolveBranch(git, _))))
         case PageSourceType.MASTER =>
           renderFromBranch(repository, git, path, resolveBranch(git, defaultBranch))
         case PageSourceType.MASTER_DOCS =>
@@ -100,14 +107,14 @@ trait PagesControllerBase extends ControllerBase {
     }
   }
 
-  def resolveBranch(git: Git, name: String) = Option(git.getRepository.resolve(name))
+  def resolveBranch(git: Git, name: String): Option[ObjectId] = Option(git.getRepository.resolve(name))
 
   // redirect [owner/repo/pages/path] -> [owner/repo/pages/path/]
   def shouldRedirect(path: String, path0: String): Boolean =
-    !isRoot(path) && path0 != path && path0.startsWith(path) && !path.endsWith("/")
+    !isRoot(path) && path0 != path && path0.startsWith(path) && !endsWithSlash()
 
   def getPageObjectId(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
-    listProbablePages(path).collectFirstOpt(getPathObjectIdPair(git, _, revCommit))
+    listProbablePages(path).collectFirst(Function.unlift(getPathObjectIdPair(git, _, revCommit)))
   }
 
   def listProbablePages(path: String): List[String] = {
@@ -134,20 +141,6 @@ trait PagesControllerBase extends ControllerBase {
 
 object PagesControllerBase {
   case class OptionsForm(source: PageSourceType)
-
-  implicit class listCollectFirst[A](private val lst: List[A]) extends AnyVal {
-    @tailrec
-    final def collectFirstOpt[B](f: A => Option[B]): Option[B] = {
-      lst match {
-        case head :: tail =>
-          f(head) match {
-            case Some(x) => Some(x)
-            case None    => tail.collectFirstOpt(f)
-          }
-        case Nil => None
-      }
-    }
-  }
 
   def pagesOption: Constraint = new Constraint() {
     override def validate(name: String, value: String, messages: Messages): Option[String] =
