@@ -31,7 +31,7 @@ jobs:
         cd gitbucket
         sbt publishLocal
         cd ../
-        sbt test
+        sbt scalafmtSbtCheck scalafmtCheckAll test
     - name: Assembly
       run: sbt assembly
     - name: Upload artifacts

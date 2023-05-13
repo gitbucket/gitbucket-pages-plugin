@@ -21,8 +21,7 @@ trait PagesService {
       .map(t => t.source)
       .update(source)
 
-  def renameRepository(userName: String, oldRepositoryName: String, newRepositoryName: String)(
-    implicit
+  def renameRepository(userName: String, oldRepositoryName: String, newRepositoryName: String)(implicit
     s: Session
   ): Unit =
     Pages
