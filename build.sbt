@@ -1,6 +1,6 @@
 organization := "gitbucket"
 name := "gitbucket-pages-plugin"
-scalaVersion := "2.13.18"
+scalaVersion := "3.9.0"
 version := "1.10.0"
 gitbucketVersion := "4.47.0"
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
