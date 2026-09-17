@@ -14,7 +14,7 @@ import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit
 import org.scalatra.i18n.Messages
 
-import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 import scala.util.Using
 import scala.annotation.tailrec
 import scala.language.implicitConversions
@@ -80,10 +80,18 @@ trait PagesControllerBase extends ControllerBase {
   })
 
   def renderPageObject(git: Git, path: String, obj: ObjectId): Unit = {
-    JGitUtil.getObjectLoaderFromId(git, obj) { loader =>
-      contentType = guessContentType(path)
-      response.setContentLength(loader.getSize.toInt)
-      loader.copyTo(response.getOutputStream)
+    val etag = "\"" + obj.getName + "\""
+    response.setHeader("ETag", etag)
+    response.setHeader("Cache-Control", "no-cache")
+    if (Option(request.getHeader("If-None-Match")).contains(etag)) {
+      response.setStatus(HttpServletResponse.SC_NOT_MODIFIED)
+    } else {
+      JGitUtil.getObjectLoaderFromId(git, obj) { loader =>
+        contentType = guessContentType(path)
+        response.addHeader("X-Content-Type-Options", "nosniff")
+        response.setContentLengthLong(loader.getSize)
+        loader.copyTo(response.getOutputStream)
+      }
     }
   }
 
@@ -98,7 +106,7 @@ trait PagesControllerBase extends ControllerBase {
       .flatMap(getPageObjectId(git, path, _))
 
     pagePair match {
-      case Some((realPath, _)) if shouldRedirect(path, realPath) =>
+      case Some((realPath, _)) if shouldRedirect(path, realPath, endsWithSlash()) =>
         redirect(s"/${repository.owner}/${repository.name}/pages/$path/")
       case Some((realPath, pageObject)) =>
         renderPageObject(git, realPath, pageObject)
@@ -110,8 +118,8 @@ trait PagesControllerBase extends ControllerBase {
   def resolveBranch(git: Git, name: String): Option[ObjectId] = Option(git.getRepository.resolve(name))
 
   // redirect [owner/repo/pages/path] -> [owner/repo/pages/path/]
-  def shouldRedirect(path: String, path0: String): Boolean =
-    !isRoot(path) && path0 != path && path0.startsWith(path) && !endsWithSlash()
+  def shouldRedirect(path: String, path0: String, endsWithSlash: Boolean): Boolean =
+    !isRoot(path) && path0 != path && path0.startsWith(path) && !endsWithSlash
 
   def getPageObjectId(git: Git, path: String, revCommit: RevCommit): Option[(String, ObjectId)] = {
     listProbablePages(path).collectFirst(Function.unlift(getPathObjectIdPair(git, _, revCommit)))
