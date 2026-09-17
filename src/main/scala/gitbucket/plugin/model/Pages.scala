@@ -4,7 +4,7 @@ trait PagesComponent { self: gitbucket.core.model.Profile =>
   import profile.api._
 
   implicit val psColumnType: BaseColumnType[PageSourceType] =
-    MappedColumnType.base[PageSourceType, String](ps => ps.code, code => PageSourceType.valueOf(code))
+    MappedColumnType.base[PageSourceType, String](ps => ps.code, PageSourceType.fromCode)
 
   lazy val Pages = TableQuery[Pages]
 
@@ -32,6 +32,9 @@ object PageSourceType {
 
   def valueOf(code: String): PageSourceType = map(code)
   def valueOpt(code: String): Option[PageSourceType] = map.get(code)
+
+  // Used to decode the SOURCE column; falls back to GH_PAGES instead of throwing on an unrecognized code.
+  def fromCode(code: String): PageSourceType = valueOpt(code).getOrElse(GH_PAGES)
 }
 
 case class Page(userName: String, repositoryName: String, source: PageSourceType)
