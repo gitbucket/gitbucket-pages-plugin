@@ -5,4 +5,6 @@ version := "1.10.0"
 gitbucketVersion := "4.47.1"
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-feature")
 
+libraryDependencies += "org.scalatra" %% "scalatra-scalatest-javax" % "3.2.1" % Test
+
 scalafmtOnCompile := true
