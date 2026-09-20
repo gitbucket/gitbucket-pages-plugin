@@ -73,7 +73,7 @@ trait PagesControllerBase extends ControllerBase {
     html.options(repository, source, defaultBranch, flash.get("info"))
   })
 
-  post("/:owner/:repository/settings/pages", optionsForm)(ownerOnly { (form, repository) =>
+  post("/:owner/:repository/settings/pages", optionsForm)(ownerOnlyWithForm { (form, repository) =>
     updatePageOptions(repository.owner, repository.name, form.source)
     flash.update("info", "Pages source saved")
     redirect(s"/${repository.owner}/${repository.name}/settings/pages")
