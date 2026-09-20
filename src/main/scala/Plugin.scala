@@ -35,7 +35,8 @@ class Plugin extends gitbucket.core.plugin.Plugin {
     new Version("1.7.1"),
     new Version("1.8.0"),
     new Version("1.9.0"),
-    new Version("1.10.0")
+    new Version("1.10.0"),
+    new Version("1.11.0")
   )
 
   override val controllers: Seq[(String, ControllerBase)] = Seq("/*" -> new PagesController)
