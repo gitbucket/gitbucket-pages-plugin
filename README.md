@@ -23,6 +23,59 @@ places:
 
 **Note**: This plugin won't render markdown content. To render markdown content, use the GitBucket Wiki functionality, or use one of the many static site generators (e.g. [jekyll](http://jekyllrb.com/), [hugo](https://gohugo.io/))
 
+### Deploy from GitBucket CI
+
+If you build your site with [gitbucket-ci-plugin](https://github.com/takezoe/gitbucket-ci-plugin),
+the build can publish it to the `gb-pages` branch:
+
+1. Pick a user to push with, ideally a dedicated one that is a collaborator (write access) only on
+   the repositories it deploys, and generate a personal access token for it (Account settings → Applications).
+2. Save the token in a file on the GitBucket server, readable only by the OS user GitBucket runs as.
+3. In the repository, go to Settings → Build, choose the "Script" build type and adapt this script:
+
+```sh
+set -eu
+SITE_DIR=public                    # where your build writes the site
+SOURCE_BRANCH=main                 # deploy only builds of this branch
+GB_URL=https://gitbucket.example.com
+GB_USER=deployer                   # must be the owner of the token
+TOKEN_FILE=/etc/gitbucket/pages-deploy-token
+
+./build-site.sh                    # your site build
+
+if [ "$CI_PULL_REQUEST" != false ] || [ "$CI_BUILD_BRANCH" != "$SOURCE_BRANCH" ]; then
+  echo "Not deploying (branch $CI_BUILD_BRANCH, pull request $CI_PULL_REQUEST)"
+  exit 0
+fi
+[ -f "$SITE_DIR/index.html" ] || { echo "No $SITE_DIR/index.html, not deploying"; exit 1; }
+
+cd "$SITE_DIR"
+rm -rf .git
+git init -q
+git checkout -q -b gb-pages
+git add -A
+git -c user.name=CI -c user.email=ci@localhost commit -q -m "Deploy $CI_COMMIT_ID [skip ci]"
+export GB_USER TOKEN_FILE
+git -c credential.helper= \
+    -c credential.helper='!f() { echo "username=$GB_USER"; echo "password=$(cat "$TOKEN_FILE")"; }; f' \
+    push -q --force "$GB_URL/git/$CI_REPO_SLUG.git" gb-pages
+```
+
+Every deploy replaces `gb-pages` with a single commit. The repository's Pages setting must be
+"gh-pages branch" (the default), which serves `gb-pages`.
+
+- `[skip ci]` in the commit message keeps the push from starting a build of `gb-pages`. It works as long as
+  it's in the repository's CI skip words (it is by default).
+- `Authentication failed` means a wrong token, a `GB_USER` that doesn't own it, or a user without write access.
+- Branch protection on `gb-pages` rejects the force push.
+- If GitBucket uses a certificate from a private CA, `git` in the build must trust it
+  (system trust store, or `export GIT_SSL_CAINFO=/path/to/ca.crt` in the script).
+- POSIX shell only: it doesn't work with the Docker build types or on Windows.
+
+**Security**: builds run as the GitBucket OS user, so any build on the server can read the token file. That
+includes other repositories' builds and pull request builds, which run code from the pull request (from forks
+too, if you enabled fork pull request builds). Give the token's user no more access than it needs.
+
 ## Installation
 
 **This plugin is bundled with newer version of GitBucket, for older
