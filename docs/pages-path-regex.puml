@@ -1,0 +1,5 @@
+@startregex
+title Path pattern for pages in the reverse proxy examples
+^/[^/]+/[^/]+/pages(/|;|$)
+caption /<owner>/<repository>/pages, then "/", ";" (path parameter) or the end of the path
+@endregex
