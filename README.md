@@ -62,16 +62,34 @@ version please follow the instruction below**
 
 ## Security (panic mode)
 
-To prevent XSS, one must use two different domains to host the pages and
-Gitbucket itself. Below is a working example of nginx configuration to achieve that.
+Pages are served from GitBucket's own origin, so JavaScript on a page runs with the session of whoever
+opens it (XSS). Anyone who can push to a repository's pages can do that. To prevent it, serve pages from a
+second domain: a reverse proxy redirects `/<owner>/<repo>/pages` on the GitBucket host to a host that serves
+nothing but pages.
+
+- Prefer a domain that is not a subdomain of GitBucket's domain (like `github.io` for `github.com`).
+  A sibling subdomain is the same site: it can set cookies for the parent domain, and browsers send
+  GitBucket's cookies with its requests.
+- The examples match `pages` followed by `/`, `;` or the end of the path. That covers every URL form the
+  servlet container maps to pages, including path parameters like `/<owner>/<repo>/pages;x/`.
+
+  ![Diagram of the path pattern](docs/pages-path-regex.svg)
+
+  (Diagram source: [docs/pages-path-regex.puml](docs/pages-path-regex.puml), rendered with
+  `java -jar plantuml.jar -tsvg docs/pages-path-regex.puml`.)
+- Pages of private repositories don't work on the second host, because it never gets the GitBucket session.
+
+Working examples, with GitBucket on `127.0.0.1:8080`, `git.local` for GitBucket and `doc.local` for pages:
+
+nginx:
 
 ```
 server {
     listen 80;
     server_name git.local;
 
-    location ~ ^/([^/]+)/([^/]+)/pages/(.*)$ {
-        rewrite  ^/([^/]+)/([^/]+)/pages/(.*)$  http://doc.local/$1/$2/pages/$3  redirect;
+    location ~ "^/[^/]+/[^/]+/pages(/|;|$)" {
+        return 302 http://doc.local$request_uri;
     }
 
     location / {
@@ -83,13 +101,31 @@ server {
     listen 80;
     server_name doc.local;
 
-    location ~ ^/([^/]+)/([^/]+)/pages/(.*)$ {
+    location ~ "^/[^/]+/[^/]+/pages(/|;|$)" {
         proxy_pass http://127.0.0.1:8080;
     }
 
     location / {
         return 403;
     }
+}
+```
+
+Caddy (without the `http://` prefixes, Caddy serves both hosts over HTTPS with automatic certificates):
+
+```
+http://git.local {
+	@pages path_regexp ^/[^/]+/[^/]+/pages(/|;|$)
+	redir @pages http://doc.local{uri}
+	reverse_proxy 127.0.0.1:8080
+}
+
+http://doc.local {
+	@pages path_regexp ^/[^/]+/[^/]+/pages(/|;|$)
+	handle @pages {
+		reverse_proxy 127.0.0.1:8080
+	}
+	respond 403
 }
 ```
 
